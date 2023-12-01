@@ -23,6 +23,7 @@ import java.util.Map;
 import org.apache.kafka.connect.errors.ConnectException;
 import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.source.SourceTask;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,8 +64,8 @@ public class OraCdcSourceTask extends SourceTask {
 		schemaType = Integer.parseInt(props.get(ParamConstants.SCHEMA_TYPE_PARAM));
 		LOGGER.debug("schemaType (Integer value 1 for Debezium, 2 for Kafka STD) = {} .", schemaType);
 		if (schemaType == ParamConstants.SCHEMA_TYPE_INT_KAFKA_STD) {
-			topic = props.get(ParamConstants.TOPIC_PREFIX_PARAM) + 
-					props.get(OraCdcSourceConnectorConfig.TASK_PARAM_MASTER);
+			topic = sanitizeTopicName(props.get(ParamConstants.TOPIC_PREFIX_PARAM) +
+					props.get(OraCdcSourceConnectorConfig.TASK_PARAM_MASTER));
 		} else {
 			// ParamConstants.SCHEMA_TYPE_INT_DEBEZIUM
 			topic = props.get(ParamConstants.KAFKA_TOPIC_PARAM);
@@ -104,6 +105,11 @@ public class OraCdcSourceTask extends SourceTask {
 			LOGGER.error(ExceptionUtils.getExceptionStackTrace(sqle));
 			throw new ConnectException(sqle);
 		}
+	}
+
+	@NotNull
+	private static String sanitizeTopicName(String topicName) {
+		return topicName.replaceAll("[^a-zA-Z0-9_-]","_");
 	}
 
 	@Override

@@ -195,7 +195,7 @@ public class OraCdcSourceConnector extends SourceConnector {
 			LOGGER.debug("maxTasks set to -> {}.", maxTasks);
 			LOGGER.debug("tableCount set to -> {}.", tableCount);
 		}
-		if (maxTasks != tableCount) {
+		if (maxTasks >= tableCount) {
 			final String message = 
 					"To run " + OraCdcSourceConnector.class.getName() +
 					" against " + (
@@ -207,13 +207,13 @@ public class OraCdcSourceConnector extends SourceConnector {
 								config.getString(ParamConstants.CONNECTION_URL_PARAM) +
 								" using wallet " +
 								config.getString(ParamConstants.CONNECTION_WALLET_PARAM)) +
-					" parameter tasks.max must set to " + tableCount;
+					" parameter tasks.max must be set to at least " + tableCount + ", given the number of tables to process.";
 			LOGGER.error(message);
 			LOGGER.error("Stopping {}", OraCdcSourceConnector.class.getName());
 			throw new ConnectException(message);
 		}
 
-		final List<Map<String, String>> configs = new ArrayList<>(maxTasks);
+		final List<Map<String, String>> configs = new ArrayList<>(tableCount);
 		try (Connection connection = OraPoolConnectionFactory.getConnection()) {
 			String sqlStatementText = null;
 			if (mvLogPre11gR2) {
@@ -233,7 +233,7 @@ public class OraCdcSourceConnector extends SourceConnector {
 			final PreparedStatement statement = connection.prepareStatement(sqlStatementText);
 			final ResultSet resultSet = statement.executeQuery();
 
-			for (int i = 0; i < maxTasks; i++) {
+			for (int i = 0; i < tableCount; i++) {
 				resultSet.next();
 				final Map<String, String> taskParam = new HashMap<>();
 
