@@ -195,7 +195,7 @@ public class OraCdcSourceConnector extends SourceConnector {
 			LOGGER.debug("maxTasks set to -> {}.", maxTasks);
 			LOGGER.debug("tableCount set to -> {}.", tableCount);
 		}
-		if (maxTasks >= tableCount) {
+		if (maxTasks < tableCount) {
 			final String message = 
 					"To run " + OraCdcSourceConnector.class.getName() +
 					" against " + (
