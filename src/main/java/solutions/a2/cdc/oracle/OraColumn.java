@@ -1084,7 +1084,7 @@ public class OraColumn {
 		SchemaBuilder builder = SchemaBuilder.int8();
 		if (defaultValuePresent) {
 			try {
-				typedDefaultValue = Byte.parseByte(defaultValue);
+				typedDefaultValue = Byte.parseByte(defaultValue.trim());
 				builder.defaultValue(typedDefaultValue);
 			} catch (NumberFormatException nfe) {
 				logDefaultValueError("byte");
@@ -1108,7 +1108,7 @@ public class OraColumn {
 		SchemaBuilder builder = SchemaBuilder.int16();
 		if (defaultValuePresent) {
 			try {
-				typedDefaultValue = Short.parseShort(defaultValue);
+				typedDefaultValue = Short.parseShort(defaultValue.trim());
 				builder.defaultValue(typedDefaultValue);
 			} catch (NumberFormatException nfe) {
 				logDefaultValueError("short");
@@ -1132,7 +1132,7 @@ public class OraColumn {
 		SchemaBuilder builder = SchemaBuilder.int32();
 		if (defaultValuePresent) {
 			try {
-				typedDefaultValue = Integer.parseInt(defaultValue);
+				typedDefaultValue = Integer.parseInt(defaultValue.trim());
 				builder.defaultValue(typedDefaultValue);
 			} catch (NumberFormatException nfe) {
 				logDefaultValueError("int");
@@ -1156,7 +1156,7 @@ public class OraColumn {
 		SchemaBuilder builder = SchemaBuilder.int64();
 		if (defaultValuePresent) {
 			try {
-				typedDefaultValue = Long.parseLong(defaultValue);
+				typedDefaultValue = Long.parseLong(defaultValue.trim());
 				builder.defaultValue(typedDefaultValue);
 			} catch (NumberFormatException nfe) {
 				logDefaultValueError("long");
@@ -1180,7 +1180,7 @@ public class OraColumn {
 		SchemaBuilder builder = Decimal.builder(scale);
 		if (defaultValuePresent) {
 			try {
-				typedDefaultValue = (new BigDecimal(defaultValue)).setScale(scale);
+				typedDefaultValue = (new BigDecimal(defaultValue.trim())).setScale(scale);
 				builder.defaultValue(typedDefaultValue);
 			} catch (NumberFormatException nfe) {
 				logDefaultValueError("java.math.BigDecimal");
@@ -1204,7 +1204,7 @@ public class OraColumn {
 		SchemaBuilder builder = SchemaBuilder.float64();
 		if (defaultValuePresent) {
 			try {
-				typedDefaultValue = Double.parseDouble(defaultValue);
+				typedDefaultValue = Double.parseDouble(defaultValue.trim());
 				builder.defaultValue(typedDefaultValue);
 			} catch (NumberFormatException nfe) {
 				logDefaultValueError("double");
@@ -1228,7 +1228,7 @@ public class OraColumn {
 		SchemaBuilder builder = SchemaBuilder.float32();
 		if (defaultValuePresent) {
 			try {
-				typedDefaultValue = Float.parseFloat(defaultValue);
+				typedDefaultValue = Float.parseFloat(defaultValue.trim());
 				builder.defaultValue(typedDefaultValue);
 			} catch (NumberFormatException nfe) {
 				logDefaultValueError("float");
@@ -1252,7 +1252,7 @@ public class OraColumn {
 		SchemaBuilder builder = OraNumber.builder();
 		if (defaultValuePresent) {
 			try {
-				typedDefaultValue = (new NUMBER(defaultValue, 10)).getBytes();
+				typedDefaultValue = (new NUMBER(defaultValue.trim(), 10)).getBytes();
 				builder.defaultValue(typedDefaultValue);
 			} catch (SQLException sqle) {
 				LOGGER.error(
