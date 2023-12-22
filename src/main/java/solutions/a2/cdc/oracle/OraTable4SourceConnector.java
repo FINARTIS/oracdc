@@ -210,6 +210,12 @@ public abstract class OraTable4SourceConnector extends OraTableDefinition {
 				mViewSelect.append(OraColumn.MVLOG_SEQUENCE);
 				mViewSelect.append(" > ");
 				mViewSelect.append(lastProcessedSequence);
+
+				// Initial load is manually insterted into MVLOG with sequence -1
+				mViewSelect.append("\n OR ");
+				mViewSelect.append(OraColumn.MVLOG_SEQUENCE);
+				mViewSelect.append(" = -1 ");
+
 				mViewSelect.append("\n");
 				LOGGER.debug("Will read mvlog with {} greater than {}.",
 							OraColumn.MVLOG_SEQUENCE, lastProcessedSequence);
