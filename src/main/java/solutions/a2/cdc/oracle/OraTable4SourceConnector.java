@@ -387,7 +387,7 @@ public abstract class OraTable4SourceConnector extends OraTableDefinition {
 							while ((charsRead = reader.read(data, 0, data.length)) != -1) {
 								sbClob.append(data, 0, charsRead);
 							}
-							columnValue = Lz4Util.compress(sbClob.toString());
+							columnValue = sbClob.toString();
 						} catch (IOException ioe) {
 							LOGGER.error("IO Error while processing {} column {}.{}({})", 
 									oraColumn.getJdbcType() == Types.CLOB ? "CLOB" : "NCLOB",
